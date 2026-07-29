@@ -4,17 +4,26 @@ from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 import KNN
 import pandas as pd
+from linear import LinearRegression
 
-ch = datasets.load_diabetes()
-X, y = ch.data, ch.target
 
-X_train, y_train, X_test, y_test = train_test_split(X, y, test_size=0.2, random_state=234)
+X, y = datasets.make_regression(n_samples=100, n_features = 1, noise = 20, random_state = 234)
 
-clf = KNN.KNN(k=5)
-clf.fit(X_train, y_train)
-pred = clf.predict(X_test)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=234)
+def mse(y_test, predictions):
+    return np.mean((y_test-predictions)**2)
+# clf = KNN.KNN(k=5)
+# clf.fit(X_train, y_train)
+# pred = clf.predict(X_test)
+#
+# print(pred)
+#
+# mse = mse(y_test,pred)
+# print(mse)
 
-print(pred)
+reg = LinearRegression()
+reg.fit(X_train, y_train)
+prediction = reg.predict(X_test)
+mse = mse(y_test,prediction)
+print(mse)
 
-error = np.sum(pred - y_test)
-print(error)
